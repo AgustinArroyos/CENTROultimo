@@ -1,0 +1,16 @@
+
+
+.home {
+    width: 80%;
+
+
+}
+
+@media (max-width: 768px) {
+    .home {
+      
+        width: 60%;
+        
+
+    }
+  }

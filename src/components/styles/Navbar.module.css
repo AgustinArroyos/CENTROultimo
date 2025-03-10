@@ -1,0 +1,10 @@
+/* Navbar.module.css */
+ a:after {
+        display:block;
+        content: '';
+        border-bottom: solid 3px white;  
+        transform: scaleX(0);  
+        transition: transform 600ms ease-in-out;
+      }
+a:hover:after { transform: scaleX(1); } 
+

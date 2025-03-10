@@ -1,0 +1,56 @@
+/* Estilos para los subtítulos (h2 y h3) */
+.descripcion h1 {
+    font-size: 2rem;
+    color: rgb(51, 37, 143);
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .descripcion h3 {
+    font-size: 1.5rem;
+    color: #2980b9;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilo para el texto en negrita */
+  
+  
+  /* Estilos para las listas */
+  .descripcion ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .descripcion li {
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+  }
+  
+  /* Emoji icons */
+  .descripcion li::before {
+    content: '✔️ ';
+    color: green;
+    margin-right: 5px;
+  }
+  
+  /* Estilo para los párrafos */
+  .descripcion p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para enlaces, si los hubiera en el Markdown */
+  .descripcion a {
+    color: #e74c3c;
+    text-decoration: none;
+  }
+  
+  .descripcion a:hover {
+    text-decoration: underline;
+  }
+
+

@@ -1,5 +1,5 @@
 import React from 'react'
-import Banner from '../assets/Banner2.mp4';
+import Banner from '../assets/Banner3.mp4';
 
 const Hero = () => {
   return (

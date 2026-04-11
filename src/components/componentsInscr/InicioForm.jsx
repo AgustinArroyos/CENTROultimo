@@ -16,7 +16,7 @@ const InicioForm = () => {
 
             <div className='flex flex-col justify-center  items-center'>
             <h2 className='text-xl font-serif lg:ml-0 ml-6'>Centro de Formación Profesional Itinerante Nro.2</h2>
-            <div><h1 className='text-3xl font-serif'>Inscripciones 2025</h1></div>
+            <div><h1 className='text-3xl font-serif'>Inscripciones 2026</h1></div>
 
             {/* <p className='text-base font-serif'>Sebastopol 3075, Posadas, Misiones</p> 
             <p className='text-base font-serif'>+54 9 3764 15-5513</p>

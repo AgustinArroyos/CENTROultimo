@@ -12,7 +12,7 @@ const CuadrosCursoDetails = () => {
   <div className='flex flex-col items-center gap-5 border-blue-300 rounded-xl p-5 border-2 '>
       <img className='h-20' src={imageCalendar1} alt="" />
       <h2 className='text-2xl font-semibold text-blue-900'>Fecha de Inicio</h2>
-      <p className="self-start">El inicio de las actividades sera el 2025</p>
+      <p className="self-start">El inicio de las actividades sera el 2026</p>
 
   </div>
 

@@ -130,7 +130,7 @@ const CursosDetail = () => {
                       {horario.attributes?.Inicio_fin || "No especificado"}
                     </td>
                     <td className="py-3 px-4">
-                    17/3/2025
+                    17/3/2026
 
                     </td>
                   </tr>

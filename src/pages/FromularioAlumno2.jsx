@@ -6,11 +6,14 @@ import useFetchCursos from '../hooks/useFetchCursos';
 import useForm from '../hooks/useForm';
 import { postAlumno, fetchHorarios } from '../services/api';
 import { initialFormData } from '../utils/formData';
-import Aviso from '../components/componentsInscr/Aviso'
+import Aviso from '../components/componentsInscr/Aviso';
+
 const FormularioAlumno = () => {
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [submittedData, setSubmittedData] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
+  const [sinCupos, setSinCupos] = useState(false);
+
   const { cursos, loading, error } = useFetchCursos();
 
   const [selectedCurso, setSelectedCurso] = useState(null);
@@ -19,14 +22,30 @@ const FormularioAlumno = () => {
   const [horariosDisponibles, setHorariosDisponibles] = useState([]);
 
   const token = import.meta.env.VITE_API_TOKEN;
-  
+
   const onSubmitCallback = (formData) => {
+    // Bloquear envío si no hay horarios/cupos
+    if (sinCupos || horariosByCurso.length === 0) {
+      setErrorMessage('No hay cupos disponibles para el curso seleccionado.');
+      return;
+    }
+
+    // Bloquear envío si no eligió un horario válido
+    if (!formData.Horario || horariosDisponibles.length === 0) {
+      setErrorMessage('Debe seleccionar un horario disponible.');
+      return;
+    }
+
+    setErrorMessage('');
+
     const data = { data: formData };
     console.log(data);
+
     postAlumno(data, token)
       .then(() => {
         setSubmittedData(formData);
         setSubmissionSuccess(true);
+        setSinCupos(false);
         resetForm();
       })
       .catch(() => {
@@ -39,36 +58,51 @@ const FormularioAlumno = () => {
   const {
     formData,
     errors,
-    handleChange,
     handleSubmit,
     resetForm,
     setFormData,
   } = useForm(initialFormData, onSubmitCallback);
 
-  // Función para obtener horarios por curso
   const getHorariosByCurso = async (cursoId) => {
     try {
-      console.log("Obteniendo horarios para el curso ID:", cursoId);
+      console.log('Obteniendo horarios para el curso ID:', cursoId);
       const response = await fetchHorarios(cursoId, token);
-      console.log("Respuesta de horarios:", response);
-      
+      console.log('Respuesta de horarios:', response);
+
       setHorariosByCurso(response);
-      
+
+      // Si no hay horarios, marcar sin cupos y limpiar selects
+      if (!response || response.length === 0) {
+        setSinCupos(true);
+        setEscuelasDisponibles([]);
+        setHorariosDisponibles([]);
+        setFormData((prevData) => ({
+          ...prevData,
+          Escuela: '',
+          Horario: '',
+        }));
+        return;
+      }
+
+      setSinCupos(false);
+
       // Extraer escuelas únicas de los horarios
       const escuelasUnicas = Array.from(
-        new Set(response.map(horario => 
-          horario.attributes.escuela.data.attributes.Nombre
-        ))
-      ).map(nombre => ({
+        new Set(
+          response.map(
+            (horario) => horario.attributes.escuela.data.attributes.Nombre
+          )
+        )
+      ).map((nombre) => ({
         nombre,
-        id: response.find(h => 
-          h.attributes.escuela.data.attributes.Nombre === nombre
-        ).attributes.escuela.data.id
+        id: response.find(
+          (h) => h.attributes.escuela.data.attributes.Nombre === nombre
+        ).attributes.escuela.data.id,
       }));
-      
-      console.log("Escuelas únicas:", escuelasUnicas);
+
+      console.log('Escuelas únicas:', escuelasUnicas);
       setEscuelasDisponibles(escuelasUnicas);
-      
+
       // Reiniciar los campos de Escuela y Horario
       setFormData((prevData) => ({
         ...prevData,
@@ -76,22 +110,29 @@ const FormularioAlumno = () => {
         Horario: '',
       }));
     } catch (err) {
-      console.error("Error al obtener horarios:", err);
+      console.error('Error al obtener horarios:', err);
       setHorariosByCurso([]);
       setEscuelasDisponibles([]);
+      setHorariosDisponibles([]);
+      setSinCupos(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        Escuela: '',
+        Horario: '',
+      }));
     }
   };
 
-  // Filtrar horarios por escuela seleccionada
   useEffect(() => {
     if (formData.Escuela && horariosByCurso.length > 0) {
-      console.log("Filtrando horarios para escuela:", formData.Escuela);
-      
+      console.log('Filtrando horarios para escuela:', formData.Escuela);
+
       const horariosFiltrados = horariosByCurso.filter(
-        horario => horario.attributes.escuela.data.attributes.Nombre === formData.Escuela
+        (horario) =>
+          horario.attributes.escuela.data.attributes.Nombre === formData.Escuela
       );
-      
-      console.log("Horarios filtrados:", horariosFiltrados);
+
+      console.log('Horarios filtrados:', horariosFiltrados);
       setHorariosDisponibles(horariosFiltrados);
     } else {
       setHorariosDisponibles([]);
@@ -101,13 +142,16 @@ const FormularioAlumno = () => {
   const customHandleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
+    setErrorMessage('');
+
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
 
     if (name === 'Curso') {
-      console.log("Curso seleccionado:", value);
+      console.log('Curso seleccionado:', value);
+
       const cursoSeleccionado = cursos.find(
         (curso) => curso.attributes.Nombre === value
       );
@@ -115,14 +159,14 @@ const FormularioAlumno = () => {
       setSelectedCurso(cursoSeleccionado);
 
       if (cursoSeleccionado) {
-        console.log("Curso encontrado:", cursoSeleccionado.id);
-        // Obtener horarios para este curso
+        console.log('Curso encontrado:', cursoSeleccionado.id);
         getHorariosByCurso(cursoSeleccionado.id);
       } else {
-        console.log("Curso no encontrado");
+        console.log('Curso no encontrado');
         setHorariosByCurso([]);
         setEscuelasDisponibles([]);
         setHorariosDisponibles([]);
+        setSinCupos(false);
         setFormData((prevData) => ({
           ...prevData,
           Escuela: '',
@@ -131,9 +175,8 @@ const FormularioAlumno = () => {
       }
     }
 
-    // Si cambia la Escuela, reinicia el Horario
     if (name === 'Escuela') {
-      console.log("Escuela seleccionada:", value);
+      console.log('Escuela seleccionada:', value);
       setFormData((prevData) => ({
         ...prevData,
         Horario: '',
@@ -152,39 +195,38 @@ const FormularioAlumno = () => {
   return (
     <div className="h-auto bg-slate-200">
       <InicioForm />
+
       {submissionSuccess && (
-
-
-  <div>
-<SuccessMessage
-          nombre={submittedData.nombre}
-          apellido={submittedData.apellido}
-          curso={submittedData.Curso}
-        />
-
-
-
-  <Aviso/>
-
-</div>
-
-
-  
-
+        <div>
+          <SuccessMessage
+            nombre={submittedData.nombre}
+            apellido={submittedData.apellido}
+            curso={submittedData.Curso}
+          />
+          <Aviso />
+        </div>
       )}
+
+      {sinCupos && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-center mt-4 mx-4">
+          No hay cupos disponibles para el curso seleccionado.
+        </div>
+      )}
+
       {errorMessage && (
         <div className="text-red-500 text-center mt-4">{errorMessage}</div>
       )}
+
       <Formulario
         formData={formData}
         handleChange={customHandleChange}
-        handleSubmit={handleSubmit}
+        handleSubmit={sinCupos ? (e) => e.preventDefault() : handleSubmit}
         cursos={cursos}
         errors={errors}
         escuelasDisponibles={escuelasDisponibles}
         horariosDisponibles={horariosDisponibles}
+        sinCupos={sinCupos}
       />
-
     </div>
   );
 };

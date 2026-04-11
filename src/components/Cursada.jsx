@@ -118,7 +118,7 @@ useEffect(() => {
 
                 </p>
                 <p>- <span className="font-semibold">Duración:</span> 4 meses</p>
-                <p>- <span className="font-semibold">Inscripciones Abiertas:</span>  17 Noviembre / 28 Marzo 2025</p>
+                <p>- <span className="font-semibold">Inscripciones Abiertas</span></p>
                 <div className=" flex flex-col mt-4">
                         
                         <Link 

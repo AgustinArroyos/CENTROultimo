@@ -31,7 +31,7 @@ const navItems = [
     ],
   }, // Nuevo elemento
   { label: 'SUBIR DOCUMENTOS', path: 'https://docs.google.com/forms/d/e/1FAIpQLSf8zVjro-lBU8tDMO4uBPmZ2oqJPqYHvKnGFF3gZwRIA4yDcA/viewform', type: 'external' },
-  { label: 'AULA VIRTUAL', path: 'https://aula.centrodeformacionitinerante2.com/', type: 'external' },
+  { label: 'AULA VIRTUAL', path: 'https://aula2.centrodeformacionitinerante2.com/', type: 'external' },
 ];
 
 const Navbar = () => {

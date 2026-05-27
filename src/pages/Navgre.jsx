@@ -52,7 +52,7 @@ const Navgre = () => {
           {
                 navItems.map(({link, path}) => {
                   if (link === "Aula Virtual" ||link === "Inscripcion" ||link === "Subir Documentos"  ) {
-                    return <a href={path} target="_blank" rel="noopener noreferrer" className="block text-base text-gray900 hover:text-brandPrimary first:font-medium">{link}</a>;
+                    return <a key={link} href={path} target="_blank" rel="noopener noreferrer" className="block text-base text-gray900 hover:text-brandPrimary first:font-medium">{link}</a>;
                   } else {
                     return <Link to={path} spy={true} smooth={true} offset={-100} key={link} className="block text-base text-gray900 hover:text-brandPrimary first:font-medium">{link}</Link>;
                   }

@@ -17,6 +17,8 @@ const FormularioAlumno = () => {
   });
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [submittedData, setSubmittedData] = useState({});
+  const token = import.meta.env.VITE_STRAPI_TOKEN || '';
+
   const resetForm = () => {
     setFormData({
       correo: '',

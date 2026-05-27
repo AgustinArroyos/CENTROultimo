@@ -10,6 +10,7 @@ const Cursada = () => {
 // Estado para controlar cuándo la animación debe activarse
 const sectionRef = useRef(null);
 const [cursos, setcursos] = useState([]);
+const [, setIsVisible] = useState(false);
 
 // Este efecto activa la animación cuando el componente es visible
 useEffect(() => {
@@ -75,6 +76,12 @@ useEffect(() => {
     </div>
   );
 
+  const sendEvent = (...args) => {
+    if (window.gtag) {
+      window.gtag('event', ...args);
+    }
+  };
+
   const customTheme = {
 
     "indicators": {
@@ -100,7 +107,7 @@ useEffect(() => {
       ) : (
         cursos.map((curso) => (
         
-        <div className="flex flex-col   md:flex-row-reverse items-center justify-between gap-16">
+        <div key={curso.id} className="flex flex-col   md:flex-row-reverse items-center justify-between gap-16">
        
 
 

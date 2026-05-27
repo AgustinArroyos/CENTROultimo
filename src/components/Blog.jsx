@@ -38,7 +38,7 @@ const Blog = () => {
       ];
     return (
         <div  className='px-4 lg:px-14  mx-auto my-12' >
-            <div
+            <motion.div
             variants={fadeIn("left", 0.2)}
             initial="hidden"
             whileInView={"show"}
@@ -51,10 +51,10 @@ const Blog = () => {
             </h2>
             <p className="text-sm text-neutralGrey mb-8 md:w-3/4 mx-auto">
             En nuestro centro, cada lección es un paso hacia adelante. Desarrolla tus habilidades con nosotros y alcanza nuevas alturas. ¡Aprende, crece y avanza con nosotros!            </p>
-            </div>
+            </motion.div>
 
             {/* all blogs */}
-            <div 
+            <motion.div 
             variants={fadeIn("right", 0.3)}
             initial="hidden"
             whileInView={"show"}
@@ -104,7 +104,7 @@ const Blog = () => {
 
 
 
-            </div>
+            </motion.div>
 
         </div>
     );

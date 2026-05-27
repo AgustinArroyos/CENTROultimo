@@ -130,7 +130,7 @@ const FormularioAlumno = () => {
   };
 
   return (
-    <div style={bodyStyle}>
+    <div className='pt-20' style={bodyStyle}>
       <div style={contenedorStyle}>
         <InicioForm />
 

@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from '../assets/logo1.png';
-import { Link } from "react-router-dom";
-import { Link as ScrollLink } from "react-scroll";
-import { FaXmark, FaBars } from "react-icons/fa6";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { FaBars, FaChevronDown, FaExternalLinkAlt, FaTimes } from "react-icons/fa";
+import { gsap } from "gsap";
 
-// Dentro de tu componente Navbar
 const navItems = [
   { label: 'INICIO', path: '/', type: 'route' },
-  { label: 'INSCRIPCION', path: '/inscripcion', type: 'route' },
+  { label: 'INSCRIPCION', path: '/inscripcion', type: 'route', featured: true },
   {
     label: 'CURSOS',
     type: 'dropdown',
@@ -22,12 +20,8 @@ const navItems = [
       { label: 'Programador web', path: '/curso/6', type: 'route' },
       { label: 'Secretariado Administrativo Contable', path: '/curso/9', type: 'route' },
       { label: 'Auxiliar Administrativo', path: '/curso/8', type: 'route' },
-
-
-
-
     ],
-  }, // Nuevo elemento
+  },
   { label: 'SUBIR DOCUMENTOS', path: 'https://docs.google.com/forms/d/e/1FAIpQLSf8zVjro-lBU8tDMO4uBPmZ2oqJPqYHvKnGFF3gZwRIA4yDcA/viewform', type: 'external' },
   { label: 'AULA VIRTUAL', path: 'https://aula2.centrodeformacionitinerante2.com/', type: 'external' },
 ];
@@ -35,257 +29,169 @@ const navItems = [
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // Nuevo estado para controlar los dropdowns
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const headerRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-  const handleDropdown = (label) => {
-      setOpenDropdown(openDropdown === label ? null : label);
-    };
-
- useEffect(() => {
-      const handleScroll = () => {
-        if (window.scrollY > 100) {
-          setIsSticky(true);
-          setIsMenuOpen(false);
-        } else {
-          setIsSticky(false);
-        }
-      };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  useEffect(() => {
+    gsap.fromTo(
+      headerRef.current,
+      { y: -24, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }
+    );
   }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setOpenDropdown(null);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => setIsSticky(window.scrollY > 40);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (isMenuOpen && mobileMenuRef.current) {
+      gsap.fromTo(
+        mobileMenuRef.current,
+        { y: -12, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }
+      );
+    }
+  }, [isMenuOpen]);
+
+  const renderDesktopItem = (item) => {
+    if (item.type === 'dropdown') {
+      return (
+        <li key={item.label} className="relative">
+          <button
+            onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+            className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-100 transition hover:bg-white/10 hover:text-white"
+            type="button"
+          >
+            {item.label}
+            <FaChevronDown className={`h-3 w-3 transition ${openDropdown === item.label ? 'rotate-180' : ''}`} />
+          </button>
+          {openDropdown === item.label && (
+            <div className="absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-950/20">
+              <div className="px-3 pb-2 pt-1 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Cursos</div>
+              <div className="grid gap-1">
+                {item.children.map((child) => (
+                  <Link
+                    key={child.label}
+                    to={child.path}
+                    className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-sky-50 hover:text-sky-800"
+                  >
+                    {child.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </li>
+      );
+    }
+
+    const baseClass = item.featured
+      ? 'rounded-full bg-white px-4 py-2 text-sm font-bold text-sky-950 shadow-lg shadow-sky-950/20 transition hover:-translate-y-0.5 hover:bg-sky-100'
+      : 'rounded-full px-3 py-2 text-sm font-semibold text-slate-100 transition hover:bg-white/10 hover:text-white';
+
+    if (item.type === 'external') {
+      return (
+        <li key={item.label}>
+          <a href={item.path} target="_blank" rel="noopener noreferrer" className={`${baseClass} inline-flex items-center gap-2`}>
+            {item.label}
+            <FaExternalLinkAlt className="h-3 w-3 opacity-70" />
+          </a>
+        </li>
+      );
+    }
+
+    return (
+      <li key={item.label}>
+        <Link to={item.path} className={baseClass}>{item.label}</Link>
+      </li>
+    );
+  };
+
+  const renderMobileItem = (item) => {
+    if (item.type === 'dropdown') {
+      return (
+        <div key={item.label} className="rounded-2xl bg-slate-900/70">
+          <button
+            onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+            className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-bold text-white"
+            type="button"
+          >
+            {item.label}
+            <FaChevronDown className={`h-3 w-3 transition ${openDropdown === item.label ? 'rotate-180' : ''}`} />
+          </button>
+          {openDropdown === item.label && (
+            <div className="grid gap-1 border-t border-white/10 px-3 py-3">
+              {item.children.map((child) => (
+                <Link key={child.label} to={child.path} className="rounded-xl px-3 py-2 text-sm text-slate-200 hover:bg-white/10">
+                  {child.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const className = item.featured
+      ? 'block rounded-2xl bg-white px-4 py-3 text-center text-sm font-bold text-sky-950'
+      : 'block rounded-2xl bg-slate-900/70 px-4 py-3 text-sm font-bold text-white hover:bg-white/10';
+
+    if (item.type === 'external') {
+      return <a key={item.label} href={item.path} target="_blank" rel="noopener noreferrer" className={className}>{item.label}</a>;
+    }
+
+    return <Link key={item.label} to={item.path} className={className}>{item.label}</Link>;
+  };
+
   return (
     <div>
-    <header className="bg-sky-950 fixed top-0 left-0 right-0">
-      <nav
-        className={`py-4 lg:px-7 px-4 ${
-          isSticky ? 'sticky top-0 bg-sky-800 transition-all duration-300' : ''
-        }`}
-      >
-        <div className="flex justify-between items-center text-base gap-10 mr-7">
-          <Link to="/" className="text-2xl font-semibold flex items-center space-x-1">
-            <img src={logo} alt="Logo" className="w-10" />
-            <span className="text-white text-lg">C. F. P. I. N°2</span>
-          </Link>
+      <header ref={headerRef} className="fixed left-0 right-0 top-0 z-[10001] px-3 py-3 md:px-6">
+        <nav className={`mx-auto max-w-7xl rounded-3xl border px-4 transition-all duration-300 md:px-6 ${isSticky ? 'border-white/15 bg-slate-950/90 py-2 shadow-2xl shadow-slate-950/20 backdrop-blur-xl' : 'border-white/10 bg-slate-950/78 py-3 backdrop-blur-lg'}`}>
+          <div className="flex items-center justify-between gap-5">
+            <Link to="/" className="flex min-w-0 items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white shadow-lg shadow-sky-950/20">
+                <img src={logo} alt="C. F. P. I. N°2" className="h-8 w-8 object-contain" />
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-bold leading-tight text-white md:text-base">C. F. P. I. N°2</span>
+                <span className="hidden text-xs font-medium text-sky-100/75 sm:block">Formacion profesional itinerante</span>
+              </span>
+            </Link>
 
-          {/* Menú de navegación para pantallas grandes */}
-          <ul className="md:flex space-x-12 hidden text-white">
-            {navItems.map((item) => {
-              if (item.type === 'dropdown') {
-                // Renderizar el dropdown
-                return (
-                  <li key={item.label} className="relative group">
-                    <button
-                      onClick={() => handleDropdown(item.label)}
-                      className="text-base font-bold hover:text-sky-300 flex items-center"
-                    >
-                      {item.label}
-                      <svg
-                        className="w-4 h-4 ml-1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          d="M1 1l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    {openDropdown === item.label && (
-                      <ul className="absolute mt-2 bg-white text-gray-700 rounded shadow-lg z-10 transition-all duration-300 transform opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100">
-                        {item.children.map((child) => (
-                          <li key={child.label}>
-                            {child.type === 'route' ? (
-                              <Link
-                                to={child.path}
-                                className="block px-4 py-2 hover:bg-blue-600 hover:text-white"
-                              >
-                                {child.label}
-                              </Link>
-                            ) : (
-                              <a
-                                href={child.path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block px-4 py-2 hover:bg-gray-100"
-                              >
-                                {child.label}
-                              </a>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                );
-              } else {
-                // Renderizar elementos normales
-                if (item.type === 'scroll') {
-                  return (
-                    <ScrollLink
-                      to={item.path}
-                      spy={true}
-                      smooth={true}
-                      offset={-100}
-                      key={item.label}
-                      className="cursor-pointer text-base text-white-900 hover:text-sky-100 font-medium"
-                    >
-                      {item.label}
-                    </ScrollLink>
-                  );
-                } else if (item.type === 'route') {
-                  return (
-                    <Link
-                      to={item.path}
-                      key={item.label}
-                      className="text-base text-white-900 hover:text-sky-300 font-bold"
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                } else if (item.type === 'external') {
-                  return (
-                    <a
-                      href={item.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      key={item.label}
-                      className="text-base text-white-900 hover:text-sky-300 font-bold"
-                    >
-                      {item.label}
-                    </a>
-                  );
-                }
-              }
-              return null;
-            })}
-          </ul>
+            <ul className="hidden items-center gap-1 lg:flex">
+              {navItems.map(renderDesktopItem)}
+            </ul>
 
-          {/* Botón del menú móvil */}
-          <div className="md:hidden">
-            <button onClick={toggleMenu} className="text-white focus:outline-none">
-              {isMenuOpen ? (
-                <FaXmark className="h-6 w-6 text-white" />
-              ) : (
-                <FaBars className="h-6 w-6 text-white" />
-              )}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="grid h-11 w-11 place-items-center rounded-2xl bg-white/10 text-white transition hover:bg-white/20 lg:hidden"
+              type="button"
+              aria-label={isMenuOpen ? 'Cerrar menu' : 'Abrir menu'}
+            >
+              {isMenuOpen ? <FaTimes className="h-5 w-5" /> : <FaBars className="h-5 w-5" />}
             </button>
           </div>
-        </div>
 
-        {/* Menú móvil */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-sky-950 py-7 space-y-4">
-            {navItems.map((item) => {
-              if (item.type === 'dropdown') {
-                return (
-                  <div key={item.label}>
-                    <button
-                      onClick={() => handleDropdown(item.label)}
-                      className="text-white hover:text-gray-500 flex items-center w-full text-left px-4 py-2"
-                    >
-                      {item.label}
-                      <svg
-                        className="w-4 h-4 ml-1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 10 6"
-                      >
-                        <path
-                          d="M1 1l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    {openDropdown === item.label && (
-                      <ul className="pl-4">
-                        {item.children.map((child) => (
-                          <li key={child.label}>
-                            {child.type === 'route' ? (
-                              <Link
-                                to={child.path}
-                                onClick={toggleMenu}
-                                className="block text-white hover:text-gray-500 px-4 py-2"
-                              >
-                                {child.label}
-                              </Link>
-                            ) : (
-                              <a
-                                href={child.path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={toggleMenu}
-                                className="block text-white hover:text-gray-500 px-4 py-2"
-                              >
-                                {child.label}
-                              </a>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                );
-              } else {
-                if (item.type === 'scroll') {
-                  return (
-                    <ScrollLink
-                      to={item.path}
-                      spy={true}
-                      smooth={true}
-                      offset={-90}
-                      key={item.label}
-                      onClick={toggleMenu}
-                      className="block text-white hover:text-gray-500 cursor-pointer"
-                    >
-                      {item.label}
-                    </ScrollLink>
-                  );
-                } else if (item.type === 'route') {
-                  return (
-                    <Link
-                      to={item.path}
-                      key={item.label}
-                      onClick={toggleMenu}
-                      className="block text-white hover:text-gray-500 px-4 py-2"
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                } else if (item.type === 'external') {
-                  return (
-                    <a
-                      href={item.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      key={item.label}
-                      onClick={toggleMenu}
-                      className="block text-white hover:text-gray-500 px-4 py-2"
-                    >
-                      {item.label}
-                    </a>
-                  );
-                }
-              }
-              return null;
-            })}
-          </div>
-        )}
-      </nav>
-    </header>
-    <div className="mt-12">
+          {isMenuOpen && (
+            <div ref={mobileMenuRef} className="grid gap-3 pt-4 lg:hidden">
+              {navItems.map(renderMobileItem)}
+            </div>
+          )}
+        </nav>
+      </header>
       <Outlet />
     </div>
-  </div>
   );
 };
 

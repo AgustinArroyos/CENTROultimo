@@ -74,7 +74,7 @@ const Posts = () => {
           
           
           
-            <div className="rounded overflow-hidden shadow-lg flex flex-col">
+            <div key={post.id} className="rounded overflow-hidden shadow-lg flex flex-col">
              <Link to={`/posts/${post.id}`}>
             <div className="relative"><a href="#">
                     <img className="w-full"

@@ -1,16 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap');
 
-body{
-    scroll-behavior: smooth;
-    background-color: "#61893";
-    position: relative;
-    
+html {
+  scroll-behavior: smooth;
 }
 
-header{
-    z-index: 10001 !important;
+body {
+  position: relative;
+  background: #ffffff;
+  color: #0f172a;
 }
 
-.btn-primary{
-    @apply bg-brandPrimary text-white  py-2 px-4 transition-all duration-300 rounded hover:bg-neutralDGrey hover:-translate-y-2;
+header {
+  z-index: 10001 !important;
+}
+
+.btn-primary {
+  @apply rounded-full bg-sky-700 px-6 py-3 font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-sky-900;
 }

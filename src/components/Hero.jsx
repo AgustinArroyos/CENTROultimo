@@ -1,20 +1,20 @@
-import React from 'react'
+import React from 'react';
 import Banner from '../assets/Banner3.mp4';
 
 const Hero = () => {
   return (
-    <div className='right-0 left-0' >
-        <video
-        className=" mt-5 left-0' "
+    <section className="relative w-full overflow-hidden bg-slate-950 pt-16">
+      <video
+        className="h-[48vh] min-h-[320px] w-full object-cover object-center md:h-[100vh]"
+         style={{ objectPosition: '90% 10%' }} 
         src={Banner}
         autoPlay
         loop
         muted
+        playsInline
       />
+    </section>
+  );
+};
 
-
-    </div>
-  )
-}
-
-export default Hero
+export default Hero;

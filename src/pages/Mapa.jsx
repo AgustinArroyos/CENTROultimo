@@ -1,73 +1,104 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react';
+import { FaEnvelope, FaInstagram, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa';
+import { FaClock } from 'react-icons/fa6';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const Prueba2 = () => {
+gsap.registerPlugin(ScrollTrigger);
 
-  const handleRedirect = (platform) => {
-    switch (platform) {
-     
-      case 'instagram':
-        window.location.href = 'https://www.instagram.com/cdfpi2misiones/';
-        break;
-      case 'whatsapp':
-        window.location.href = 'https://web.whatsapp.com/';
-        break;
-      default:
-        break;
-    }
-  };
+const contactItems = [
+  { icon: FaMapMarkerAlt, label: 'Direccion', value: 'Pedro Morcillo 3075, Posadas, Misiones' },
+  { icon: FaEnvelope, label: 'Email', value: 'centrodeformacionitinerante2@gmail.com' },
+  { icon: FaClock, label: 'Horarios', value: 'Lunes a Viernes de 14:00hs a 20:00hs' },
+];
 
+const Mapa = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        '.map-reveal',
+        { y: 28, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 72%' },
+        }
+      );
+    }, sectionRef);
+
+    return () => context.revert();
+  }, []);
 
   return (
-    <div className=' flex flex-col lg:flex-row bg-blue-200 p-2 gap-8 lg:gap-2 lg:p-14 w-full'>
-
-
-        <div>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d592.123178290419!2d-55.90465456845078!3d-27.377813361120552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9457be4666f0cbf7%3A0x71fc6fefafa770fb!2sInstituto%20Posadas%200403!5e0!3m2!1ses!2sar!4v1727102864432!5m2!1ses!2sar" className='h-full w-full lg:w-[450px]'  loading="lazy" ></iframe>
+    <section ref={sectionRef} className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+        <div className="map-reveal overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl shadow-slate-950/10">
+          <iframe
+            title="Ubicacion del Centro de Formacion Profesional Itinerante N2"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d592.123178290419!2d-55.90465456845078!3d-27.377813361120552!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9457be4666f0cbf7%3A0x71fc6fefafa770fb!2sInstituto%20Posadas%200403!5e0!3m2!1ses!2sar!4v1727102864432!5m2!1ses!2sar"
+            className="h-[360px] w-full border-0 lg:h-full lg:min-h-[520px]"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
 
-        <div className='flex flex-col justify-center gap-8 ml-8 lg:p-16 '>
-            <h2 className='text-3xl lg:text-5xl font-bold'>Centro de formacion profesional itinerante n2</h2>
-            <div>
-            <h3  className='text-xl font-semibold mb-1 text-blue-700'>Direccion</h3>
-            <p className=' ml-5 mb-5'>Pedro Morcillo 3075</p>
-            <h3 className='text-xl font-semibold mb-1 text-blue-700'>Email</h3>
-            <p className=' ml-5 mb-5'>centrodeformacionitinerante2@gmail.com</p>
-            <h3 className='text-xl font-semibold mb-1 text-blue-700'>Horarios de atencion</h3>
-            <p className=' ml-5 mb-5'>Horarios de atención: de Lunes a Viernes de 14:00hs a 20:00hs.</p>
-            </div>
-            
-            <div className='flex gap-5'>
-                
-                
-                <button onClick={() => handleRedirect('instagram') } className="group transition-all duration-500 hover:-translate-y-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 93 92" fill="none">
-                <rect x="1.13867" width="91.5618" height="91.5618" rx="15" fill="url(#paint0_linear_7092_54439)"/>
-                <path d="M38.3762 45.7808C38.3762 41.1786 42.1083 37.4468 46.7132 37.4468C51.3182 37.4468 55.0522 41.1786 55.0522 45.7808C55.0522 50.383 51.3182 54.1148 46.7132 54.1148C42.1083 54.1148 38.3762 50.383 38.3762 45.7808ZM33.8683 45.7808C33.8683 52.8708 39.619 58.618 46.7132 58.618C53.8075 58.618 59.5581 52.8708 59.5581 45.7808C59.5581 38.6908 53.8075 32.9436 46.7132 32.9436C39.619 32.9436 33.8683 38.6908 33.8683 45.7808ZM57.0648 32.4346C57.0646 33.0279 57.2404 33.608 57.5701 34.1015C57.8997 34.595 58.3684 34.9797 58.9168 35.2069C59.4652 35.4342 60.0688 35.4939 60.6511 35.3784C61.2334 35.2628 61.7684 34.9773 62.1884 34.5579C62.6084 34.1385 62.8945 33.6041 63.0105 33.0222C63.1266 32.4403 63.0674 31.8371 62.8404 31.2888C62.6134 30.7406 62.2289 30.2719 61.7354 29.942C61.2418 29.6122 60.6615 29.436 60.0679 29.4358H60.0667C59.2708 29.4361 58.5077 29.7522 57.9449 30.3144C57.3821 30.8767 57.0655 31.6392 57.0648 32.4346ZM36.6072 66.1302C34.1683 66.0192 32.8427 65.6132 31.9618 65.2702C30.7939 64.8158 29.9606 64.2746 29.0845 63.4002C28.2083 62.5258 27.666 61.6938 27.2133 60.5266C26.8699 59.6466 26.4637 58.3214 26.3528 55.884C26.2316 53.2488 26.2073 52.4572 26.2073 45.781C26.2073 39.1048 26.2336 38.3154 26.3528 35.678C26.4639 33.2406 26.8731 31.918 27.2133 31.0354C27.668 29.8682 28.2095 29.0354 29.0845 28.1598C29.9594 27.2842 30.7919 26.7422 31.9618 26.2898C32.8423 25.9466 34.1683 25.5406 36.6072 25.4298C39.244 25.3086 40.036 25.2844 46.7132 25.2844C53.3904 25.2844 54.1833 25.3106 56.8223 25.4298C59.2612 25.5408 60.5846 25.9498 61.4677 26.2898C62.6356 26.7422 63.4689 27.2854 64.345 28.1598C65.2211 29.0342 65.7615 29.8682 66.2161 31.0354C66.5595 31.9154 66.9658 33.2406 67.0767 35.678C67.1979 38.3154 67.2221 39.1048 67.2221 45.781C67.2221 52.4572 67.1979 53.2466 67.0767 55.884C66.9656 58.3214 66.5573 59.6462 66.2161 60.5266C65.7615 61.6938 65.2199 62.5266 64.345 63.4002C63.4701 64.2738 62.6356 64.8158 61.4677 65.2702C60.5872 65.6134 59.2612 66.0194 56.8223 66.1302C54.1855 66.2514 53.3934 66.2756 46.7132 66.2756C40.033 66.2756 39.2432 66.2514 36.6072 66.1302ZM36.4001 20.9322C33.7371 21.0534 31.9174 21.4754 30.3282 22.0934C28.6824 22.7316 27.2892 23.5878 25.897 24.977C24.5047 26.3662 23.6502 27.7608 23.0116 29.4056C22.3933 30.9948 21.971 32.8124 21.8497 35.4738C21.7265 38.1394 21.6982 38.9916 21.6982 45.7808C21.6982 52.57 21.7265 53.4222 21.8497 56.0878C21.971 58.7494 22.3933 60.5668 23.0116 62.156C23.6502 63.7998 24.5049 65.196 25.897 66.5846C27.289 67.9732 28.6824 68.8282 30.3282 69.4682C31.9204 70.0862 33.7371 70.5082 36.4001 70.6294C39.0687 70.7506 39.92 70.7808 46.7132 70.7808C53.5065 70.7808 54.3592 70.7526 57.0264 70.6294C59.6896 70.5082 61.5081 70.0862 63.0983 69.4682C64.7431 68.8282 66.1373 67.9738 67.5295 66.5846C68.9218 65.1954 69.7745 63.7998 70.4149 62.156C71.0332 60.5668 71.4575 58.7492 71.5768 56.0878C71.698 53.4202 71.7262 52.57 71.7262 45.7808C71.7262 38.9916 71.698 38.1394 71.5768 35.4738C71.4555 32.8122 71.0332 30.9938 70.4149 29.4056C69.7745 27.7618 68.9196 26.3684 67.5295 24.977C66.1395 23.5856 64.7431 22.7316 63.1003 22.0934C61.5081 21.4754 59.6894 21.0514 57.0284 20.9322C54.3612 20.811 53.5085 20.7808 46.7152 20.7808C39.922 20.7808 39.0687 20.809 36.4001 20.9322Z" fill="white"/>
-                <defs>
-                  <linearGradient id="paint0_linear_7092_54439" x1="90.9407" y1="91.5618" x2="-0.621143" y2="-2.46459e-06" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#FBE18A"/>
-                    <stop offset="0.21" stop-color="#FCBB45"/>
-                    <stop offset="0.38" stop-color="#F75274"/>
-                    <stop offset="0.52" stop-color="#D53692"/>
-                    <stop offset="0.74" stop-color="#8F39CE"/>
-                    <stop offset="1" stop-color="#5B4FE9"/>
-                  </linearGradient>
-                </defs>
-                </svg>
-                </button>
-               
-                <button onClick={() => handleRedirect('whatsapp') } className="group transition-all duration-500 hover:-translate-y-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 93 92" fill="none">
-                <rect x="1.13867" width="91.5618" height="91.5618" rx="15" fill="#00D95F"/>
-                <path d="M23.5068 66.8405L26.7915 54.6381C24.1425 49.8847 23.3009 44.3378 24.4211 39.0154C25.5413 33.693 28.5482 28.952 32.89 25.6624C37.2319 22.3729 42.6173 20.7554 48.0583 21.1068C53.4992 21.4582 58.6306 23.755 62.5108 27.5756C66.3911 31.3962 68.7599 36.4844 69.1826 41.9065C69.6053 47.3286 68.0535 52.7208 64.812 57.0938C61.5705 61.4668 56.8568 64.5271 51.5357 65.7133C46.2146 66.8994 40.6432 66.1318 35.8438 63.5513L23.5068 66.8405ZM36.4386 58.985L37.2016 59.4365C40.6779 61.4918 44.7382 62.3423 48.7498 61.8555C52.7613 61.3687 56.4987 59.5719 59.3796 56.7452C62.2605 53.9185 64.123 50.2206 64.6769 46.2279C65.2308 42.2351 64.445 38.1717 62.4419 34.6709C60.4388 31.1701 57.331 28.4285 53.6027 26.8734C49.8745 25.3184 45.7352 25.0372 41.8299 26.0736C37.9247 27.11 34.4729 29.4059 32.0124 32.6035C29.5519 35.801 28.2209 39.7206 28.2269 43.7514C28.2237 47.0937 29.1503 50.3712 30.9038 53.2192L31.3823 54.0061L29.546 60.8167L36.4386 58.985Z" fill="white"/>
-                <path   d="M54.9566 46.8847C54.5093 46.5249 53.9856 46.2716 53.4254 46.1442C52.8651 46.0168 52.2831 46.0186 51.7236 46.1495C50.8831 46.4977 50.3399 47.8134 49.7968 48.4713C49.6823 48.629 49.514 48.7396 49.3235 48.7823C49.133 48.8251 48.9335 48.797 48.7623 48.7034C45.6849 47.5012 43.1055 45.2965 41.4429 42.4475C41.3011 42.2697 41.2339 42.044 41.2557 41.8178C41.2774 41.5916 41.3862 41.3827 41.5593 41.235C42.165 40.6368 42.6098 39.8959 42.8524 39.0809C42.9063 38.1818 42.6998 37.2863 42.2576 36.5011C41.9157 35.4002 41.265 34.42 40.3825 33.6762C39.9273 33.472 39.4225 33.4036 38.9292 33.4791C38.4359 33.5546 37.975 33.7709 37.6021 34.1019C36.9548 34.6589 36.4411 35.3537 36.0987 36.135C35.7562 36.9163 35.5939 37.7643 35.6236 38.6165C35.6256 39.0951 35.6864 39.5716 35.8046 40.0354C36.1049 41.1497 36.5667 42.2144 37.1754 43.1956C37.6145 43.9473 38.0937 44.6749 38.6108 45.3755C40.2914 47.6767 42.4038 49.6305 44.831 51.1284C46.049 51.8897 47.3507 52.5086 48.7105 52.973C50.1231 53.6117 51.6827 53.8568 53.2237 53.6824C54.1018 53.5499 54.9337 53.2041 55.6462 52.6755C56.3588 52.1469 56.9302 51.4518 57.3102 50.6512C57.5334 50.1675 57.6012 49.6269 57.5042 49.1033C57.2714 48.0327 55.836 47.4007 54.9566 46.8847Z" fill="white"/>
-                </svg>
-                </button>
+        <div className="map-reveal flex flex-col justify-between rounded-[2rem] bg-slate-950 p-7 text-white shadow-2xl shadow-slate-950/20 sm:p-10 lg:p-12">
+          <div>
+            <span className="text-sm font-bold uppercase tracking-[0.22em] text-sky-300">Ubicacion y contacto</span>
+            <h2 className="mt-4 text-3xl font-bold leading-tight md:text-5xl">Centro de formacion profesional itinerante N2</h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
+              Estamos en Posadas para acompanar tu formacion con cursos gratuitos, orientacion y atencion presencial.
+            </p>
+          </div>
+
+          <div className="my-10 grid gap-4">
+            {contactItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.label} className="flex gap-4 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky-400/15 text-sky-200">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-slate-400">{item.label}</h3>
+                    <p className="mt-1 text-base font-semibold text-white">{item.value}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a
+              href="https://www.instagram.com/cdfpi2misiones/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5 hover:bg-sky-100"
+            >
+              <FaInstagram className="h-5 w-5" />
+              Instagram
+            </a>
+            <a
+              href="https://web.whatsapp.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+            >
+              <FaWhatsapp className="h-5 w-5" />
+              WhatsApp
+            </a>
+          </div>
+        </div>
       </div>
-        </div>
+    </section>
+  );
+};
 
-</div>
-  )
-}
-
-export default Prueba2
+export default Mapa;

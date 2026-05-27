@@ -6,7 +6,7 @@ const Hero = () => {
     <section className="relative w-full overflow-hidden bg-slate-950 pt-16">
       <video
         className="h-[48vh] min-h-[320px] w-full object-cover object-center md:h-[100vh]"
-         style={{ objectPosition: '90% 10%' }} 
+         style={{ objectPosition: '50% 10%' }} 
         src={Banner}
         autoPlay
         loop

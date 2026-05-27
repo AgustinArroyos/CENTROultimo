@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchCursos } from '../services/api';
+import { fetchCursosPublicados } from '../services/api';
 
 const useFetchCursos = () => {
   const [cursos, setCursos] = useState([]);
@@ -9,10 +9,10 @@ const useFetchCursos = () => {
   useEffect(() => {
     const getCursos = async () => {
       try {
-        const response = await fetchCursos();
-        setCursos(response.data.data);
-      } catch (error) {
-        setError(error);
+        const data = await fetchCursosPublicados();
+        setCursos(Array.isArray(data) ? data : []);
+      } catch (err) {
+        setError(err);
       } finally {
         setLoading(false);
       }

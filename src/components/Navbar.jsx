@@ -8,9 +8,7 @@ import { Outlet } from "react-router-dom";
 // Dentro de tu componente Navbar
 const navItems = [
   { label: 'INICIO', path: '/', type: 'route' },
-  { label: 'NOSOTROS', path: '/nosotros', type: 'route' },
   { label: 'INSCRIPCION', path: '/inscripcion', type: 'route' },
-  { label: 'NOTICIAS', path: '/posts', type: 'route' },
   {
     label: 'CURSOS',
     type: 'dropdown',

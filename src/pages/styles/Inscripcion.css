@@ -1,0 +1,111 @@
+/* =========================================
+   Animación de entrada para cada paso
+========================================= */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.inscr-bloque {
+  animation: aparecer 0.35s ease;
+}
+
+/* =========================================
+   Bullet verde antes del h3 (pasos 1-3)
+========================================= */
+.inscr-h3::before {
+  content: "●";
+  color: #2e9d50;
+  font-size: 16px;
+}
+
+/* Corazón azul antes del h3 (paso 4) */
+.inscr-h3-datos::before {
+  content: "💙";
+  font-size: 20px;
+}
+
+/* =========================================
+   Botones de curso — hover / active
+========================================= */
+.inscr-boton-curso {
+  transition: all 0.22s ease;
+}
+.inscr-boton-curso:hover {
+  background: #edf6ff;
+  border-color: #2c7be5;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(18, 60, 105, 0.16);
+}
+.inscr-boton-curso:active {
+  transform: scale(0.98);
+}
+
+/* =========================================
+   Campo (tarjeta de cada campo) — hover
+========================================= */
+.inscr-campo {
+  transition: all 0.2s ease;
+}
+.inscr-campo:hover {
+  transform: translateY(-2px);
+  border-color: #9fcbf3;
+  box-shadow: 0 13px 26px rgba(18, 60, 105, 0.12);
+}
+
+/* =========================================
+   Inputs y selects — focus
+========================================= */
+.inscr-input:focus,
+.inscr-select:focus {
+  outline: none;
+  border-color: #2c7be5;
+  box-shadow: 0 0 0 4px rgba(44, 123, 229, 0.13);
+}
+
+/* =========================================
+   Botón enviar — hover
+========================================= */
+.inscr-boton-enviar {
+  transition: all 0.22s ease;
+}
+.inscr-boton-enviar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(18, 60, 105, 0.32);
+}
+.inscr-boton-enviar::before {
+  content: "✅ ";
+}
+
+/* =========================================
+   Botón secundario — hover + prefijo
+========================================= */
+.inscr-boton-secundario {
+  transition: all 0.2s ease;
+}
+.inscr-boton-secundario:hover {
+  background: #e3effb;
+  border-color: #2c7be5;
+}
+
+.inscr-boton-secundario-datos::before {
+  content: "↩ ";
+}
+
+/* =========================================
+   Responsive ≤ 650px
+========================================= */
+@media screen and (max-width: 650px) {
+  .inscr-grilla-cursos {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .inscr-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .inscr-form-grid .inscr-campo-completo {
+    grid-column: auto !important;
+  }
+}

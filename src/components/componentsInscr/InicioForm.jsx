@@ -1,35 +1,35 @@
-import React from 'react'
-import cge from '../../assets/icons/cge.webp'
-import cfpi from '../../assets/logo1.png'
-
+import React from 'react';
+import cge from '../../assets/icons/cge.webp';
+import cfpi from '../../assets/logo1.png';
 
 const InicioForm = () => {
   return (
-    <div className='pt-10 mb-5 flex flex-col justify-center gap-5'>
+    <div style={{ textAlign: 'center', marginBottom: '28px', paddingBottom: '20px', borderBottom: '1px solid #e4edf7' }}>
 
-            <div className='flex  justify-center  items-center'>
-            <div>
-                <img src={cge} alt="" className='w-36' />
-            </div>
-            <div><img src={cfpi} className='w-28' /></div>
-            </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+        <img src={cge} alt="CGE" style={{ width: '120px' }} />
+        <img src={cfpi} alt="CFPI" style={{ width: '96px' }} />
+      </div>
 
-            <div className='flex flex-col justify-center  items-center'>
-            <h2 className='text-xl font-serif lg:ml-0 ml-6'>Centro de Formación Profesional Itinerante Nro.2</h2>
-            <div><h1 className='text-3xl font-serif'>Inscripciones 2026</h1></div>
+      <h1 style={{ margin: 0, color: '#123c69', fontSize: '28px', lineHeight: '1.25', fontWeight: 800 }}>
+        Centro de Formación Profesional Itinerante N.º 2
+      </h1>
 
-            {/* <p className='text-base font-serif'>Sebastopol 3075, Posadas, Misiones</p> 
-            <p className='text-base font-serif'>+54 9 3764 15-5513</p>
-            <p className='text-base font-serif'>centrodeformacionitinerante2@gmail.com</p> */}
-            </div>
-            
-            
+      <h2 style={{
+        display: 'inline-block',
+        margin: '12px 0 0',
+        padding: '8px 18px',
+        background: '#eaf3ff',
+        color: '#2563a8',
+        borderRadius: '999px',
+        fontSize: '16px',
+        fontWeight: 700,
+      }}>
+        Preinscripciones 2026
+      </h2>
 
     </div>
+  );
+};
 
-
-
-  )
-}
-
-export default InicioForm
+export default InicioForm;

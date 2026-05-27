@@ -2,6 +2,10 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://centroformacion.hopto.org/api';
 
+const NEW_API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:8080'
+  : 'https://admincfapi.ddns.net';
+
 export const fetchCursos = () => {
   
   return axios.get(`${API_BASE_URL}/cursos?fields=Nombre&populate[escuelaxturnos][fields]=id&populate[escuelaxturnos][populate][escuela][fields]=Nombre&populate[escuelaxturnos][populate][turno][fields]=Nombre
@@ -64,6 +68,34 @@ export const fetchHorarios = async (cursoId, token) => {
     
     throw error;
   }
+};
+
+export const postPreinscripto = (data) => {
+  return axios.post(`${NEW_API_BASE_URL}/api/preinscriptos`, data);
+};
+
+// Nuevos endpoints (API plana, sin Strapi)
+
+export const fetchCursosPublicados = async () => {
+  const response = await fetch(`${NEW_API_BASE_URL}/api/cortes/cursos-publicados`);
+  if (!response.ok) throw new Error(`Error ${response.status}`);
+  return response.json();
+};
+
+export const fetchEscuelasPorCurso = async (cursoId) => {
+  const response = await fetch(
+    `${NEW_API_BASE_URL}/api/escuelas/curso/${cursoId}/cortes-publicados`
+  );
+  if (!response.ok) throw new Error(`Error ${response.status}`);
+  return response.json();
+};
+
+export const fetchCortesPorCursoYEscuela = async (cursoId, escuelaId) => {
+  const response = await fetch(
+    `${NEW_API_BASE_URL}/api/cortes/curso/${cursoId}/escuela/${escuelaId}/publicados`
+  );
+  if (!response.ok) throw new Error(`Error ${response.status}`);
+  return response.json();
 };
 
 // Función para obtener horarios sim

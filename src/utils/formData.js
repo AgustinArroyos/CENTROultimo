@@ -8,5 +8,5 @@ export const initialFormData = {
     Celular: '',
     Curso: '',
     Escuela: '',
-    Turno: '',
+    Horario: '',
   };

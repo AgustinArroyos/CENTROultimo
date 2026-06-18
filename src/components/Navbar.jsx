@@ -33,6 +33,12 @@ const Navbar = () => {
   const headerRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
+  const isInscripcionPage = location.pathname === '/inscripcion';
+  const navRouteClass = isInscripcionPage
+    ? 'border-sky-200/25 bg-slate-950 py-3 shadow-2xl shadow-slate-950/35 backdrop-blur-xl'
+    : isSticky
+      ? 'border-white/15 bg-slate-950/90 py-2 shadow-2xl shadow-slate-950/20 backdrop-blur-xl'
+      : 'border-white/10 bg-slate-950/78 py-3 backdrop-blur-lg';
 
   useEffect(() => {
     gsap.fromTo(
@@ -157,7 +163,7 @@ const Navbar = () => {
   return (
     <div>
       <header ref={headerRef} className="fixed left-0 right-0 top-0 z-[10001] px-3 py-3 md:px-6">
-        <nav className={`mx-auto max-w-7xl rounded-3xl border px-4 transition-all duration-300 md:px-6 ${isSticky ? 'border-white/15 bg-slate-950/90 py-2 shadow-2xl shadow-slate-950/20 backdrop-blur-xl' : 'border-white/10 bg-slate-950/78 py-3 backdrop-blur-lg'}`}>
+        <nav className={`mx-auto max-w-7xl rounded-3xl border px-4 transition-all duration-300 md:px-6 ${navRouteClass}`}>
           <div className="flex items-center justify-between gap-5">
             <Link to="/" className="flex min-w-0 items-center gap-3">
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white shadow-lg shadow-sky-950/20">

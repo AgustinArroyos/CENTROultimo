@@ -35,6 +35,19 @@ const botonStyle = {
   boxShadow: '0 8px 18px rgba(18, 60, 105, 0.07)',
 };
 
+const avisoCupoStyle = {
+  marginTop: '18px',
+  padding: '18px 20px',
+  background: 'linear-gradient(135deg, #fff8e8 0%, #fffdf8 100%)',
+  border: '1px solid #f4d28a',
+  borderLeft: '6px solid #f59e0b',
+  borderRadius: '16px',
+  color: '#5f3b05',
+  fontSize: '15px',
+  lineHeight: '1.6',
+  boxShadow: '0 10px 22px rgba(120, 74, 8, 0.1)',
+};
+
 const PasoCursos = ({ cursos, loading, onSelect }) => {
   return (
     <div className="inscr-bloque" style={bloqueStyle}>
@@ -43,22 +56,27 @@ const PasoCursos = ({ cursos, loading, onSelect }) => {
       {loading ? (
         <p style={{ color: '#667085', fontSize: '15px' }}>Cargando cursos...</p>
       ) : (
-        <div
-          className="inscr-grilla-cursos"
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px', marginTop: '18px' }}
-        >
-          {cursos.map((curso) => (
-            <button
-              key={curso.id}
-              type="button"
-              onClick={() => onSelect(curso)}
-              className="inscr-boton-curso"
-              style={botonStyle}
-            >
-              {curso.nombre}
-            </button>
-          ))}
-        </div>
+        <>
+          <div
+            className="inscr-grilla-cursos"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px', marginTop: '18px' }}
+          >
+            {cursos.map((curso) => (
+              <button
+                key={curso.id}
+                type="button"
+                onClick={() => onSelect(curso)}
+                className="inscr-boton-curso"
+                style={botonStyle}
+              >
+                {curso.nombre}
+              </button>
+            ))}
+          </div>
+          <p style={avisoCupoStyle}>
+            Los cursos de <strong>Secretariado Contable</strong>, <strong>Operador Marketing y Ventas</strong> y <strong>Auxiliar en Bancos y Financieras</strong> ya han cubierto su cupo de <strong>Pre-inscripci&oacute;n</strong>.
+          </p>
+        </>
       )}
     </div>
   );

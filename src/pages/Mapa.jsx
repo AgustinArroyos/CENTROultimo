@@ -77,7 +77,7 @@ const Mapa = () => {
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <a
-              href="https://www.instagram.com/cdfpi2misiones/"
+              href="https://www.instagram.com/cfpi2misiones?igsh=cDlnN3FtZ2prbXYw"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:-translate-y-0.5 hover:bg-sky-100"
@@ -86,7 +86,7 @@ const Mapa = () => {
               Instagram
             </a>
             <a
-              href="https://web.whatsapp.com/"
+              href="https://wa.me/5493764155513"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/10"

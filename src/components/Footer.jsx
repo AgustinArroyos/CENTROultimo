@@ -80,10 +80,10 @@ const MyFooter = () => {
                 <span>centrodeformacionitinerante2@gmail.com</span>
               </a>
               <div className="flex gap-3 pt-2">
-                <a href="https://www.instagram.com/cdfpi2misiones/" target="_blank" rel="noopener noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-sky-500">
+                <a href="https://www.instagram.com/cfpi2misiones?igsh=cDlnN3FtZ2prbXYw" target="_blank" rel="noopener noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-sky-500">
                   <FaInstagram className="h-5 w-5" />
                 </a>
-                <a href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-emerald-500">
+                <a href="https://wa.me/5493764155513" target="_blank" rel="noopener noreferrer" className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:-translate-y-0.5 hover:bg-emerald-500">
                   <FaWhatsapp className="h-5 w-5" />
                 </a>
               </div>

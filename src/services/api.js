@@ -98,4 +98,16 @@ export const fetchCortesPorCursoYEscuela = async (cursoId, escuelaId) => {
   return response.json();
 };
 
+export const fetchTexto = async (textoId) => {
+  const response = await fetch(`${NEW_API_BASE_URL}/api/textos/${textoId}`);
+  if (!response.ok) throw new Error(`Error ${response.status}`);
+
+  const data = await response.json();
+  if (!data || typeof data.contenidoTexto !== 'string' || !data.contenidoTexto.trim()) {
+    throw new Error('El texto recibido no tiene contenido válido');
+  }
+
+  return data;
+};
+
 // Función para obtener horarios sim

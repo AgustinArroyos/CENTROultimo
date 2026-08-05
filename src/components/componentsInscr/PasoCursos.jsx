@@ -1,4 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { fetchTexto } from '../../services/api';
+
+const TEXTO_AVISO_ID = 1;
+const AVISO_CUPO_FALLBACK = 'Los cursos de **Secretariado Contable**, **Operador Marketing y Ventas** y **Auxiliar en Bancos y Financieras** ya han cubierto su cupo de **Pre-inscripción**.';
 
 const bloqueStyle = {
   background: 'linear-gradient(180deg, #f7fbff 0%, #ffffff 100%)',
@@ -49,6 +54,24 @@ const avisoCupoStyle = {
 };
 
 const PasoCursos = ({ cursos, loading, onSelect }) => {
+  const [avisoCupo, setAvisoCupo] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchTexto(TEXTO_AVISO_ID)
+      .then(({ contenidoTexto }) => {
+        if (isMounted) setAvisoCupo(contenidoTexto);
+      })
+      .catch(() => {
+        if (isMounted) setAvisoCupo(AVISO_CUPO_FALLBACK);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="inscr-bloque" style={bloqueStyle}>
       <h3 className="inscr-h3" style={h3Style}>Paso 1: Seleccione el curso</h3>
@@ -73,9 +96,17 @@ const PasoCursos = ({ cursos, loading, onSelect }) => {
               </button>
             ))}
           </div>
-          <p style={avisoCupoStyle}>
-            Los cursos de <strong>Secretariado Contable</strong>, <strong>Operador Marketing y Ventas</strong> y <strong>Auxiliar en Bancos y Financieras</strong> ya han cubierto su cupo de <strong>Pre-inscripci&oacute;n</strong>.
-          </p>
+          {avisoCupo && (
+            <div style={avisoCupoStyle}>
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p style={{ margin: 0 }}>{children}</p>,
+                }}
+              >
+                {avisoCupo}
+              </ReactMarkdown>
+            </div>
+          )}
         </>
       )}
     </div>
